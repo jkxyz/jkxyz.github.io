@@ -23,30 +23,34 @@ a {
   text-align: center;
 }
 
-.mon {
+.icon {
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
   border-left: 25px solid black;
   transform: rotate(30deg);
   width: 0;
   display: inline-block;
-  transition: border-left-color 15s ease;
+  transition: all 15s ease-in;
 }
 
-.container:hover .mon {
+.icon-after {
   border-left-color: red;
+  transform: rotate(90deg);
 }
 </style>
 </head>
 <body>
 <div class="container">
 <div>
-<div class="mon" title="Special Discretion Required"></div>
+<div class="icon" title="Special Discretion Required"></div>
 <pre>
 Josh Kingsley
 <a href="mailto:josh@joshk.xyz">josh@joshk.xyz</a>
 </pre>
 </div>
 </div>
+<script>
+window.onload = () => document.querySelector('.icon').classList.add('icon-after')
+</script>
 </body>
 </html>
