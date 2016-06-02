@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="x-ua-compatible" content="ie=edge">
+<title>Josh Kingsley</title>
+<style>
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.matrix {
+  width: 100%;
+  position: absolute;
+  height: 100%;
+  font-family: monospace;
+  line-height: 15px;
+  font-size: 1.1rem;
+  overflow: hidden;
+  text-align: center;
+  background: #fafafa;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+</style>
+</head>
+<body>
+<div id="matrix" class="matrix"></div>
+<script>
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public-Domain
+
+function getMonospaceCharWidth (fontSize) {
+  var span = document.createElement('span')
+  var charWidth
+
+  span.style.fontFamily = 'monospace'
+  span.style.fontSize = fontSize
+  span.innerText = 'a'
+
+  document.body.appendChild(span)
+
+  charWidth = span.offsetWidth
+
+  document.body.removeChild(span)
+
+  return charWidth
+}
+
+var matrixEl = document.getElementById('matrix')
+var columnCount = Math.floor(window.innerWidth / (getMonospaceCharWidth() + 1))
+var rowCount = Math.floor(window.innerHeight / 15)
+
+for (var i = 0; i < columnCount * rowCount; i++) {
+  var cell = document.createElement('div')
+
+  cell.appendChild(document.createTextNode(Math.round(Math.random())))
+  cell.style.opacity = 0
+
+  matrixEl.appendChild(cell)
+}
+
+var columnShowRate = []
+
+for (var i = 0; i < columnCount; i++) {
+  columnShowRate.push((Math.random() * 75 + 25) / 100)
+}
+
+var showMatrixPrevFrameTimestamp = Date.now()
+var columnShowRow = 0
+
+function showMatrixLoop () {
+  if (Date.now() - showMatrixPrevFrameTimestamp >= 100) {
+    showMatrixPrevFrameTimestamp = Date.now()
+
+    for (var i = 0; i < columnCount; i++) {
+      var topCell = i * rowCount
+      var bottomCell = (i + 1) * rowCount - 1
+
+      for (var j = topCell; j <= bottomCell; j++) {
+        if (j <= topCell + columnShowRate[i] * columnShowRow) {
+          if (matrixEl.children[j].style.opacity == 0) {
+            matrixEl.children[j].style.opacity = Math.random()
+          }
+        }
+      }
+    }
+
+    columnShowRow++
+
+    if (columnShowRow === 30) {
+      window.requestAnimationFrame(updateMatrixLoop)
+    }
+
+    if (columnShowRow > 200) {
+      return
+    }
+  }
+
+  window.requestAnimationFrame(showMatrixLoop)
+}
+
+window.requestAnimationFrame(showMatrixLoop)
+
+function resetBackground (cell) {
+  setTimeout(function () {
+    cell.style.backgroundColor = null
+    cell.style.color = null
+  }, Math.random() * 2000)
+}
+
+var updateMatrixPrevFrameTimestamp = Date.now()
+
+function updateMatrixLoop () {
+  if (Date.now () - updateMatrixPrevFrameTimestamp >= 25) {
+    updateMatrixPrevFrameTimestamp = Date.now()
+
+    for (var i = 0; i < 5; i++) {
+      var cell = matrixEl.children[Math.floor(Math.random() * (matrixEl.children.length - 1))]
+
+      cell.style.opacity = Math.random()
+      cell.childNodes[0].data = Math.round(Math.random())
+
+      if (Math.random() < 0.05) {
+        cell.style.backgroundColor = 'red'
+        cell.style.color = 'red'
+        resetBackground(cell)
+      }
+    }
+  }
+
+  window.requestAnimationFrame(updateMatrixLoop)
+}
+
+function getUDHR (callback) {
+  var xhr = new XMLHttpRequest()
+
+  xhr.addEventListener('load', function () {
+    callback(this.responseText.trim().replace(/[\s]+/g, ' '))
+  })
+
+  xhr.open('GET', './udhr.txt')
+  xhr.send()
+}
+
+var printUDHRPrevFrame = Date.now()
+var printUDHRChar = 0
+var printUDHRRow = 0
+var printUDHRCol = 0
+
+getUDHR(function (text) {
+  function printUDHRLoop () {
+    if (Date.now() - printUDHRPrevFrame >= 10) {
+      printUDHRPrevFrame = Date.now()
+
+      var cell = matrixEl.children[printUDHRCol * rowCount + printUDHRRow]
+
+      cell.innerHTML = text[printUDHRChar].trim() ? text[printUDHRChar] : '&nbsp;'
+      cell.style.opacity = 1
+
+      printUDHRChar++
+
+      if (++printUDHRCol === columnCount) {
+        printUDHRCol = 0
+        ++printUDHRRow
+      }
+
+      if (printUDHRRow === rowCount) {
+        printUDHRRow = 0
+        printUDHRCol = 0
+      }
+
+      if (printUDHRChar === text.length) {
+        printUDHRChar = 0
+      }
+    }
+
+    window.requestAnimationFrame(printUDHRLoop)
+  }
+
+  window.requestAnimationFrame(printUDHRLoop)
+})
+
+// @license-end
+</script>
+</body>
+</html>
