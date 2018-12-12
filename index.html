@@ -1,97 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Josh Kingsley</title>
-
 <style>
-
 body {
   margin: 0;
-  background: #fcfdff;
 }
 
-.content {
-  padding: 4rem 1rem 0 1rem;
-  position: relative;
-}
-
-.content-icon {
-  /* Position the outer icon element to add padding: */
+.container {
   position: absolute;
-  top: 0;
-  left: 0;
-  height: 28px;
-  width: 28px;
-  padding: 1rem;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
-.content-icon:before {
-  content: "";
-  transition: all .15s ease-in;
-  /* Create a solid triangle shape: */
+.icon {
   border-top: 15px solid transparent;
   border-bottom: 15px solid transparent;
-  border-left: 25px solid #EDEFF2;
+  border-left: 25px solid black;
   transform: rotate(30deg);
   width: 0;
-  /* Position with 1rem padding from edge of triangle: */
-  position: absolute;
-  top: calc(5px + 1rem);
-  left: calc(5px + 1rem);
+  display: inline-block;
+  transition: all 15s ease-in;
 }
 
-.content-icon:hover:before {
+.icon-after {
+  border-left-color: red;
   transform: rotate(90deg);
-  border-left-color: #262626;
 }
-
-.content-title {
-  font-family: monospace;
-  font-size: 1.4rem;
-}
-
-.content-lead {
-  font-family: monospace;
-  font-size: .9rem;
-  margin-top: 1rem;
-  color: #262626;
-}
-
-.content-contact {
-  font-family: monospace;
-  font-weight: bold;
-  font-size: .9rem;
-  margin-top: 3rem;
-}
-
-.content-contact > a {
-  color: #0040ff;
-}
-
 </style>
-
-<main class="content">
-
-  <div class="content-icon"></div>
-
-  <h1 class="content-title">
-    Hi there, I'm Josh!
-  </h1>
-
-  <p class="content-lead">
-    I'm a software engineer living in Berlin, Germany, available remotely.
-  </p>
-
-  <p class="content-contact">
-    <a href="mailto:josh@joshkingsley.me">
-      Say
-      <span title="English">Hi</span>/<span title="Deutsch">Hallo</span>/<span title="Română">Bună</span>!
-    </a>
-  </p>
-
-</main>
-
+</head>
+<body>
+<div class="container">
+<div>
+<div class="icon" title="Special Discretion Required"></div>
+<pre>
+Josh Kingsley
+<a href="mailto:josh@joshkingsley.me">josh@joshkingsley.me</a>
+</pre>
+</div>
+</div>
+<script>
+window.onload = function () { document.querySelector('.icon').classList.add('icon-after') }
+</script>
+</body>
 </html>
